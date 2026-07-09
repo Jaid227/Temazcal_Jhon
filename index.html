@@ -1,104 +1,88 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>Temazcal - Reserva tu experiencia ancestral</title>
-    <link rel="stylesheet" href="styles.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reservas Temazcal - Mandrágora Entrópica</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Font Awesome para íconos -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-    <!-- Botón modo nocturno/claro -->
-    <button class="theme-toggle" id="themeToggle">
-        <i class="fas fa-moon"></i>
-        <i class="fas fa-sun" style="display: none;"></i>
-    </button>
-
-    <!-- Pantalla principal de paquetes -->
-    <div id="mainScreen" class="container active">
-        <header class="hero">
-            <h1>🌀 Temazcal</h1>
-            <p>Ceremonia ancestral de purificación</p>
-        </header>
-
-        <div class="packages-grid" id="packagesGrid">
-            <!-- Los paquetes se cargarán aquí dinámicamente -->
-        </div>
-
-        <footer class="footer">
-            <a href="https://jaid227.github.io/EntropiaDigital/" target="_blank">
-                © 2026 Mandrágora Entrópica | Desarrollo Web Estratégico
-            </a>
-        </footer>
+    <!-- Modo oscuro/claro toggle -->
+    <div class="theme-toggle">
+        <button id="themeToggle" class="theme-btn">
+            <i class="fas fa-moon"></i>
+        </button>
     </div>
 
-    <!-- Pantalla de detalles del paquete -->
-    <div id="detailsScreen" class="container">
-        <button class="back-btn" onclick="showMainScreen()">
-            <i class="fas fa-arrow-left"></i> Volver
+    <!-- Header -->
+    <header>
+        <h1>🌿 Reservas Temazcal</h1>
+        <p>Experiencia ancestral de sanación</p>
+    </header>
+
+    <!-- Botón Admin -->
+    <div class="admin-section">
+        <button id="adminBtn" class="admin-btn">
+            <i class="fas fa-user-shield"></i> Área Administrativa
         </button>
-        
-        <div id="packageDetails" class="package-details">
-            <!-- Detalles del paquete se cargarán aquí -->
-        </div>
     </div>
 
-    <!-- Pantalla de formulario de reserva -->
-    <div id="formScreen" class="container">
-        <button class="back-btn" onclick="showDetailsScreen()">
-            <i class="fas fa-arrow-left"></i> Volver
-        </button>
-        
-        <div class="reservation-form">
-            <h2>Información personal</h2>
-            <form id="reservationForm">
+    <!-- Contenedor de Paquetes -->
+    <div id="paquetesContainer" class="paquetes-grid">
+        <!-- Los paquetes se cargarán aquí dinámicamente -->
+    </div>
+
+    <!-- Modal para Reserva -->
+    <div id="reservaModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Reservar Paquete</h2>
+            <div id="paqueteInfo"></div>
+            <form id="reservaForm">
                 <div class="form-group">
-                    <label for="nombre">Nombre completo:</label>
-                    <input type="text" id="nombre" name="nombre" required>
+                    <label for="nombreUsuario">Tu Nombre:</label>
+                    <input type="text" id="nombreUsuario" required>
                 </div>
-                
                 <div class="form-group">
-                    <label for="edad">Edad:</label>
-                    <input type="number" id="edad" name="edad" required min="1" max="120">
+                    <label for="fotoUsuario">Sube tu Foto (URL):</label>
+                    <input type="url" id="fotoUsuario" placeholder="https://ejemplo.com/foto.jpg" required>
+                    <small>Puedes usar servicios como imgur.com para subir imágenes</small>
                 </div>
-                
-                <button type="submit" class="btn-primary">Confirmar reserva</button>
+                <button type="submit" class="btn-primary">Enviar Reserva</button>
             </form>
         </div>
     </div>
 
-    <!-- Pantalla de confirmación -->
-    <div id="confirmScreen" class="container">
-        <button class="back-btn" onclick="showMainScreen()">
-            <i class="fas fa-home"></i> Inicio
-        </button>
-        
-        <div id="confirmationMessage" class="confirmation-card">
-            <!-- Mensaje de confirmación -->
-        </div>
-    </div>
-
-    <!-- Pantalla de administrador -->
-    <div id="adminScreen" class="container">
-        <button class="back-btn" onclick="showMainScreen()">
-            <i class="fas fa-arrow-left"></i> Volver
-        </button>
-        
-        <div class="admin-login" id="adminLogin">
-            <h2>Acceso Administrador</h2>
-            <input type="password" id="adminPassword" placeholder="Contraseña">
-            <button onclick="loginAdmin()" class="btn-primary">Ingresar</button>
-        </div>
-        
-        <div id="adminPanel" style="display: none;">
-            <h2>Panel de Administración</h2>
-            <div id="pendingReservations" class="reservations-list">
-                <!-- Reservas pendientes -->
+    <!-- Modal para Administrador -->
+    <div id="adminModal" class="modal">
+        <div class="modal-content admin-modal">
+            <span class="close">&times;</span>
+            <h2><i class="fas fa-user-shield"></i> Panel Administrativo</h2>
+            <div class="admin-login">
+                <input type="password" id="adminPassword" placeholder="Ingresa la clave">
+                <button id="loginAdminBtn" class="btn-primary">Acceder</button>
+            </div>
+            <div id="adminPanel" style="display: none;">
+                <div class="admin-tabs">
+                    <button class="tab-btn active" data-tab="pendientes">Pendientes</button>
+                    <button class="tab-btn" data-tab="confirmados">Confirmados</button>
+                    <button class="tab-btn" data-tab="gestion">Gestión</button>
+                </div>
+                <div id="adminContent">
+                    <!-- Contenido dinámico -->
+                </div>
             </div>
         </div>
     </div>
+
+    <!-- Footer -->
+    <footer>
+        <a href="https://jaid227.github.io/EntropiaDigital/" target="_blank">
+            © 2026 Mandrágora Entrópica | Desarrollo Web Estratégico
+        </a>
+    </footer>
 
     <script src="script.js"></script>
 </body>
